@@ -1,12 +1,10 @@
+import Auth from '../utils/auth';
 import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
-
 import ThoughtList from '../components/ThoughtList';
-
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
 import FriendList from '../components/FriendList';
-import Auth from '../utils/auth';
 import { ADD_FRIEND } from '../utils/mutations';
 import ThoughtForm from '../components/ThoughtForm';
 
@@ -19,11 +17,18 @@ const Profile = () => {
   });
 
   const user = data?.me || data?.user || {};
+  console.log(user);
 
-  // redirect to personal profile page if username is the logged-in user's
-    if (Auth.loggedIn() && Auth.getProfile().data.username.toLowerCase() === userParam.toLowerCase()) {
-      return <Redirect to="/profile" />;
-    }
+  console.log(Auth.getProfile().data.username.toLowerCase());
+
+  /*// redirect to personal profile page if username is the logged-in user's
+  if (Auth.loggedIn() && (Auth.getProfile().data.username.toLowerCase() === userParam.toLowerCase())) {
+    return <Redirect to="/profile" />;
+  }*/
+
+  if (Auth.loggedIn() && Auth.getProfile().data.username.toLowerCase() === `${userParam ? userParam.toLowerCase() : ''}`) {
+    return <Redirect to="/profile" />;
+  }
 
   if (loading) {
     return <div>Loading...</div>;
